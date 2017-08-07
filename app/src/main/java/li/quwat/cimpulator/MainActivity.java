@@ -19,37 +19,38 @@ public class MainActivity extends AppCompatActivity {
     private String pendingOperation = "";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        resultField = (EditText)findViewById(R.id.editText3);
-        newNumber = (EditText)findViewById(R.id.editText4);
-        displayOperation = (TextView)findViewById(R.id.textView3);
+        resultField = (EditText) findViewById(R.id.editText3);
+        newNumber = (EditText) findViewById(R.id.editText4);
+        displayOperation = (TextView) findViewById(R.id.textView3);
         displayOperation.setText("");
 
 
         //Number buttons
-        Button button0 = (Button)findViewById(R.id.button0);
-        Button button1 = (Button)findViewById(R.id.button1);
-        Button button2 = (Button)findViewById(R.id.button2);
-        Button button3 = (Button)findViewById(R.id.button3);
-        Button button4 = (Button)findViewById(R.id.button4);
-        Button button5 = (Button)findViewById(R.id.button5);
-        Button button6 = (Button)findViewById(R.id.button6);
-        Button button7 = (Button)findViewById(R.id.button7);
-        Button button8 = (Button)findViewById(R.id.button8);
-        Button button9 = (Button)findViewById(R.id.button9);
-        Button buttonDot = (Button)findViewById(R.id.buttonDot);
+        Button button0 = (Button) findViewById(R.id.button0);
+        Button button1 = (Button) findViewById(R.id.button1);
+        Button button2 = (Button) findViewById(R.id.button2);
+        Button button3 = (Button) findViewById(R.id.button3);
+        Button button4 = (Button) findViewById(R.id.button4);
+        Button button5 = (Button) findViewById(R.id.button5);
+        Button button6 = (Button) findViewById(R.id.button6);
+        Button button7 = (Button) findViewById(R.id.button7);
+        Button button8 = (Button) findViewById(R.id.button8);
+        Button button9 = (Button) findViewById(R.id.button9);
+        Button buttonDot = (Button) findViewById(R.id.buttonDot);
+        Button buttonNeg = (Button) findViewById(R.id.buttonNeg);
+        Button buttonClear = (Button) findViewById(R.id.buttonClear);
 
         //Operation buttons
-        Button sum = (Button)findViewById(R.id.sum);
-        Button divide = (Button)findViewById(R.id.divide);
-        Button sub = (Button)findViewById(R.id.sub);
-        Button multiply = (Button)findViewById(R.id.multiply);
-        Button result = (Button)findViewById(R.id.result);
+        Button sum = (Button) findViewById(R.id.sum);
+        Button divide = (Button) findViewById(R.id.divide);
+        Button sub = (Button) findViewById(R.id.sub);
+        Button multiply = (Button) findViewById(R.id.multiply);
+        final Button result = (Button) findViewById(R.id.result);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener opListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button b = (Button)v;
+                Button b = (Button) v;
                 String operation = "";
                 switch (b.getText().toString()) {
                     case "plus":
@@ -155,9 +156,41 @@ public class MainActivity extends AppCompatActivity {
         multiply.setOnClickListener(opListener);
         result.setOnClickListener(opListener);
 
+        buttonNeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String value = newNumber.getText().toString();
+                if (value.length() == 0) {
+                    newNumber.setText("-");
+                } else {
+                    try {
+                        Double doubleValue = Double.valueOf(value);
+                        doubleValue *= -1;
+                        newNumber.setText(doubleValue.toString());
+
+                    } catch (NumberFormatException e) {
+                        newNumber.setText("");
+                    }
+                }
+            }
+        });
+
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newNumber.setText("");
+                resultField.setText("");
+                pendingOperation = "";
+                displayOperation.setText("");
+                operand1 = null;
+                operand2 = null;
+
+            }
+        });
+
     }
 
-    private void performOperation (Double value, String operation) {
+    private void performOperation(Double value, String operation) {
         if (null == operand1) {
             operand1 = value;
         } else {
@@ -175,17 +208,17 @@ public class MainActivity extends AppCompatActivity {
                     if (operand2 == 0) {
                         operand1 = 0.0;
                     } else {
-                        operand1/=operand2;
+                        operand1 /= operand2;
                     }
                     break;
                 case "*":
-                    operand1*=operand2;
+                    operand1 *= operand2;
                     break;
                 case "-":
-                    operand1-=operand2;
+                    operand1 -= operand2;
                     break;
                 case "+":
-                    operand1+=operand2;
+                    operand1 += operand2;
                     break;
 
             }
